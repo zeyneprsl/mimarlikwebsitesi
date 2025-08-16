@@ -1,0 +1,15 @@
+{
+  "name": "berramimarlik",
+  "version": "1.0.0",
+  "description": "Berra Mimarlık Web Sitesi",
+  "main": "index.html",
+  "scripts": {
+    "build": "echo 'Build completed'",
+    "dev": "echo 'Development server not needed for static site'"
+  },
+  "keywords": ["mimarlık", "tasarım", "berra"],
+  "author": "Berra Mimarlık",
+  "license": "MIT",
+  "dependencies": {},
+  "devDependencies": {}
+}

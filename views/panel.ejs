@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Paneli</title>
+    <style>
+    body{font-family:sans-serif;background:#faf9f6;padding:2rem;}
+    h2{margin-top:0;}
+    .panel-flex{display:flex;gap:2.5rem;margin-bottom:1.2rem;}
+    .panel-col{flex:1;display:flex;flex-direction:column;gap:1.1rem;}
+    form.panel-form{background:#fff;padding:1.5rem 2rem 1.2rem 2rem;border-radius:18px;box-shadow:0 2px 16px #eee;max-width:1200px;margin:2rem auto 2.5rem auto;}
+    .panel-col label{font-size:0.98rem;color:#888;margin-bottom:0.2rem;}
+    input,textarea{margin:0;padding:0.6rem 0.9rem;border:1px solid #ccc;border-radius:8px;width:100%;font-size:1rem;background:#faf9f6;transition:border 0.2s;}
+    input:focus,textarea:focus{border:1.5px solid #bfa97a;outline:none;}
+    button{padding:0.6rem 0;background:linear-gradient(45deg,#bfa97a,#c8b08b);color:#fff;border:none;border-radius:8px;font-weight:bold;font-size:1.1rem;cursor:pointer;transition:background 0.2s;margin-top:0.7rem;}
+    button:hover{background:linear-gradient(45deg,#ff6b6b,#bfa97a);}
+    table{margin:2.5rem auto 0 auto;width:96%;background:#fff;border-radius:16px;box-shadow:0 2px 12px #eee;font-size:1.08rem;}
+    th,td{padding:1.1rem 1.2rem;text-align:left;}
+    tr:nth-child(even){background:#f5f5f5;}
+    th{font-size:1.13rem;}
+    a{color:#bfa97a;text-decoration:none;}
+    a:hover{text-decoration:underline;}
+    @media (max-width:1200px){form.panel-form{max-width:99vw;}table{width:99vw;}}
+    @media (max-width:900px){.panel-flex{flex-direction:column;gap:1rem;}.panel-form{padding:1rem 0.5rem;}table{font-size:1rem;}}
+    </style>
+</head>
+<body>
+    <h2>Yeni Proje Ekle</h2>
+    <form method="post" action="/admin/add" enctype="multipart/form-data" class="panel-form">
+        <div class="panel-flex">
+            <div class="panel-col">
+                <h3>Ana Sayfada Görünecek Bilgiler</h3>
+                <label>Proje Adı</label>
+                <input type="text" name="name" placeholder="Proje Adı" required>
+                <label>Açıklama</label>
+                <textarea name="desc" placeholder="Açıklama" required></textarea>
+                <label>Etiketler (virgülle)</label>
+                <input type="text" name="tags" placeholder="Etiketler (virgülle)">
+                <label>Resim Yükle</label>
+                <input type="file" name="imageFile">
+                <span style="font-size:0.95rem;color:#888;">veya</span>
+                <input type="text" name="imageUrl" placeholder="Ana Görsel Linki (Ana sayfa kartında görünür)">
+            </div>
+            <div class="panel-col">
+                <h3>Detay Ekranında Görünecek Ek Bilgiler</h3>
+                <label>Başlık Görseli Linki (Detay sayfa üst görseli)</label>
+                <input type="text" name="headerImage" placeholder="Başlık Görseli Linki">
+                <label>Detay Ana Görsel Linki (Büyük görsel)</label>
+                <input type="text" name="mainImage" placeholder="Detay Ana Görsel Linki">
+                <label>Yıl (Detayda görünür)</label>
+                <input type="text" name="year" placeholder="Yıl">
+                <label>Şehir (Detayda görünür)</label>
+                <input type="text" name="city" placeholder="Şehir">
+                <label>Galeri Görselleri (virgülle, detayda küçük galeri olarak görünür)</label>
+                <input type="text" name="gallery" placeholder="Galeri Görselleri">
+            </div>
+        </div>
+        <button type="submit">Ekle</button>
+    </form>
+    <h2>Projeler</h2>
+    <table>
+        <tr><th>Resim</th><th>Adı</th><th>Açıklama</th><th>Etiketler</th><th>İşlem</th></tr>
+        <% projects.forEach(function(p){ %>
+        <tr>
+            <td><% if(p.image){ %><img src="<%= p.image %>" style="max-width:80px;max-height:60px;"> <% } %></td>
+            <td><%= p.name %></td>
+            <td><%= p.desc %></td>
+            <td><%= p.tags.join(', ') %></td>
+            <td>
+                <form method="post" action="/admin/delete/<%= p.id %>" style="display:inline"><button type="submit">Sil</button></form>
+                <a href="/admin/edit/<%= p.id %>">Düzenle</a>
+            </td>
+        </tr>
+        <% }) %>
+    </table>
+</body>
+</html> 

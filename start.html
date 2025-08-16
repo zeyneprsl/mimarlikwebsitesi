@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BERRA MİMARLIK</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background: #faf9f6;
+            color: #222;
+            line-height: 1.7;
+            overflow-x: hidden;
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 1rem 5%;
+            background: #fff;
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        nav.scrolled {
+            background: rgba(0, 0, 0, 0.95);
+            padding: 0.5rem 5%;
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #222;
+            letter-spacing: 2px;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: #222;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .nav-links a:hover {
+            color: #ff6b6b;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        /* Hero Section */
+        .hero {
+            height: 100vh;
+            background: #faf9f6;
+            color: #111;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="0.5"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
+            animation: float 20s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+
+        .hero-content {
+            z-index: 2;
+            position: relative;
+        }
+
+        .hero h1 {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            font-weight: 300;
+            letter-spacing: 3px;
+            animation: fadeInUp 1s ease;
+        }
+
+        .hero p {
+            font-size: 1.3rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+            animation: fadeInUp 1s ease 0.3s both;
+        }
+
+        .cta-button {
+            display: inline-block;
+            padding: 1rem 2rem;
+            background: #111;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            animation: fadeInUp 1s ease 0.6s both;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            background: #333;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Sections */
+        .section {
+            padding: 5rem 5%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section h2 {
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+            text-align: center;
+            position: relative;
+        }
+
+        .section h2::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 50px;
+            height: 3px;
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+        }
+
+        /* About Section */
+        .about-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            align-items: center;
+            margin-top: 3rem;
+        }
+
+        .about-text {
+            font-size: 1.1rem;
+            line-height: 1.8;
+        }
+
+        .about-image {
+            height: 400px;
+            background: #f5f5f5;
+            border-radius: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .about-image::before {
+            content: '🏗️';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 4rem;
+            opacity: 0.7;
+        }
+
+        /* Projects Section */
+        .projects {
+            background: transparent;
+        }
+
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .project-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .project-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        .project-image {
+            height: 200px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 2rem;
+        }
+
+        .project-content {
+            padding: 1.5rem;
+        }
+
+        .project-content h3 {
+            margin-bottom: 0.5rem;
+            color: #333;
+        }
+
+        .project-content p {
+            color: #666;
+            margin-bottom: 1rem;
+        }
+
+        .project-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .tag {
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            color: white;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+
+        /* Services Section */
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .service-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .service-card:hover {
+            transform: translateY(-5px);
+            border-color: #ff6b6b;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .service-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* Contact Section */
+        .contact {
+            background: #faf9f6;
+            color: #222;
+        }
+
+        .contact-content {
+            text-align: center;
+            margin-top: 3rem;
+        }
+
+        .contact-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .contact-item {
+            background: #f5f5f5;
+            padding: 1.5rem;
+            border-radius: 10px;
+            backdrop-filter: blur(10px);
+        }
+
+        .contact-item h4 {
+            margin-bottom: 0.5rem;
+            font-size: 1.2rem;
+        }
+
+        /* Footer */
+        footer {
+            background: #faf9f6;
+            color: #222;
+            text-align: center;
+            padding: 2rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .about-content {
+                grid-template-columns: 1fr;
+            }
+
+            .section {
+                padding: 3rem 5%;
+            }
+        }
+
+        /* Scroll animations */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.6s ease;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+    <nav id="navbar">
+        <div class="nav-container">
+            <div class="logo">BERRA</div>
+            <ul class="nav-links">
+                <li><a href="#home">Ana Sayfa</a></li>
+                <li><a href="#about">Hakkımızda</a></li>
+                <li><a href="#projects">Projeler</a></li>
+                <li><a href="#services">Hizmetler</a></li>
+                <li><a href="#contact">İletişim</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <section id="home" class="hero">
+        <div class="hero-content">
+            <h1>MİMARİ MÜKEMMELLIK</h1>
+            <p>Geleceğin yapılarını bugün tasarlıyoruz</p>
+            <a href="#projects" class="cta-button">Projelerimizi Keşfedin</a>
+        </div>
+    </section>
+
+    <section class="section highlight-offer fade-in" style="text-align:center; margin-bottom: 0;">
+        <h2 style="font-size:2rem; margin-bottom:1rem;">Projelerimizi İnceleyin, Hemen Teklif Alın!</h2>
+        <a href="#projects" class="cta-button" style="margin-right:1rem;">Projelerimizi İncele</a>
+        <a href="#contact" class="cta-button" style="background:linear-gradient(45deg,#4ecdc4,#ff6b6b);">Teklif Al</a>
+    </section>
+
+    <section id="about" class="section fade-in">
+        <h2>Hakkımızda</h2>
+        <div class="about-content">
+            <div class="about-text">
+                <p>Berra Mimarlık olarak, 15 yıllık deneyimimizle modern mimarinin sınırlarını zorlayan, sürdürülebilir ve işlevsel tasarımlar oluşturuyoruz. Her proje için özgün çözümler geliştirerek, müşterilerimizin hayallerini gerçeğe dönüştürüyoruz.</p>
+                <br>
+                <p>Uzman ekibimizle konut, ticari ve endüstriyel projelerde yenilikçi yaklaşımlar benimsiyor, çevreye saygılı ve enerji verimli yapılar tasarlıyoruz.</p>
+            </div>
+            <div class="about-image"></div>
+        </div>
+    </section>
+
+    <section id="projects" class="section projects fade-in">
+        <h2>Projelerimiz</h2>
+        <div class="projects-grid">
+            <div class="project-card">
+                <div class="project-image">🏢</div>
+                <div class="project-content">
+                    <h3>Skyline Plaza</h3>
+                    <p>Modern ofis kompleksi tasarımı. 40 katlı gökdelen projesi.</p>
+                    <div class="project-tags">
+                        <span class="tag">Ofis</span>
+                        <span class="tag">Modern</span>
+                        <span class="tag">Sürdürülebilir</span>
+                    </div>
+                </div>
+            </div>
+            <div class="project-card">
+                <div class="project-image">🏘️</div>
+                <div class="project-content">
+                    <h3>Villa Garden</h3>
+                    <p>Lüks villa kompleksi. Doğayla uyumlu yaşam alanları.</p>
+                    <div class="project-tags">
+                        <span class="tag">Konut</span>
+                        <span class="tag">Lüks</span>
+                        <span class="tag">Peyzaj</span>
+                    </div>
+                </div>
+            </div>
+            <div class="project-card">
+                <div class="project-image">🏪</div>
+                <div class="project-content">
+                    <h3>Metro AVM</h3>
+                    <p>Çok fonksiyonlu alışveriş merkezi. Akıllı bina teknolojileri.</p>
+                    <div class="project-tags">
+                        <span class="tag">Ticari</span>
+                        <span class="tag">Akıllı</span>
+                        <span class="tag">Çok Fonksiyonlu</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="services" class="section fade-in">
+        <h2>Hizmetlerimiz</h2>
+        <div class="services-grid">
+            <div class="service-card">
+                <div class="service-icon">🏗️</div>
+                <h3>Mimari Tasarım</h3>
+                <p>Özgün ve işlevsel mimari çözümler sunuyoruz.</p>
+            </div>
+            <div class="service-card">
+                <div class="service-icon">📐</div>
+                <h3>İç Mimari</h3>
+                <p>Yaşam alanlarınızı estetik ve fonksiyonel hale getiriyoruz.</p>
+            </div>
+            <div class="service-card">
+                <div class="service-icon">🌱</div>
+                <h3>Peyzaj Tasarımı</h3>
+                <p>Doğal ve sürdürülebilir peyzaj çözümleri geliştiriyoruz.</p>
+            </div>
+            <div class="service-card">
+                <div class="service-icon">⚡</div>
+                <h3>Akıllı Binalar</h3>
+                <p>Teknoloji destekli, enerji verimli bina sistemleri.</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="contact" class="section contact fade-in">
+        <h2>İletişim</h2>
+        <div class="contact-content">
+            <p>Projeleriniz için bizimle iletişime geçin. Hayalinizdeki yapıyı birlikte tasarlayalım.</p>
+            <div class="contact-info">
+                <div class="contact-item">
+                    <h4>📍 Adres</h4>
+                    <p>Maslak Mahallesi<br>İstanbul, Türkiye</p>
+                </div>
+                <div class="contact-item">
+                    <h4>📞 Telefon</h4>
+                    <p>+90 212 555 0123</p>
+                </div>
+                <div class="contact-item">
+                    <h4>✉️ E-posta</h4>
+                    <p>info@berramimarlik.com</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section call-to-action fade-in" style="text-align:center; background:#fff; margin-bottom:0; margin-top:3rem; padding:3rem 5% 2rem 5%; border-radius:20px; box-shadow:0 2px 16px rgba(0,0,0,0.04);">
+        <h2 style="font-size:2rem; margin-bottom:1rem; color:#222;">Hayalinizdeki projeye bir adım daha yaklaşın!</h2>
+        <p style="font-size:1.1rem; color:#555; margin-bottom:2rem;">Bize hemen ulaşın, uzman ekibimizle hayallerinizi gerçeğe dönüştürelim.</p>
+        <a href="tel:+902125550123" class="cta-button" style="margin-right:1rem; background:linear-gradient(45deg,#4ecdc4,#667eea);">Hemen Ara</a>
+        <a href="mailto:info@berramimarlik.com" class="cta-button" style="background:linear-gradient(45deg,#ff6b6b,#764ba2);">E-posta Gönder</a>
+    </section>
+
+    <footer>
+        <p>&copy; 2024 Berra Mimarlık. Tüm hakları saklıdır.</p>
+    </footer>
+
+    <script>
+        // Navbar scroll effect
+        window.addEventListener('scroll', function() {
+            const navbar = document.getElementById('navbar');
+            if (window.scrollY > 100) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Scroll animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver(function(entries) {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.fade-in').forEach(el => {
+            observer.observe(el);
+        });
+
+        // Project cards hover effect
+        document.querySelectorAll('.project-card').forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-10px) scale(1.02)';
+            });
+            
+            card.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0) scale(1)';
+            });
+        });
+
+        // Service cards animation on scroll
+        document.querySelectorAll('.service-card').forEach((card, index) => {
+            card.style.animationDelay = `${index * 0.2}s`;
+        });
+    </script>
+</body>
+</html> 

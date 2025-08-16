@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <title>Berra Mimarlık</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: Arial, Helvetica, sans-serif; background: #faf9f6; color: #222; line-height: 1.7; overflow-x: hidden; }
+        nav { position: fixed; top: 0; width: 100%; padding: 1rem 5%; background: #fff; backdrop-filter: blur(10px); z-index: 1000; transition: all 0.3s ease; }
+        .nav-container { display: flex; justify-content: space-between; align-items: center; max-width: 1200px; margin: 0 auto; }
+        .logo { font-size: 1.8rem; font-weight: bold; color: #222; letter-spacing: 2px; }
+        .nav-links { display: flex; list-style: none; gap: 2rem; }
+        .nav-links a { color: #222; text-decoration: none; font-weight: 500; transition: all 0.3s ease; position: relative; }
+        .nav-links a:hover { color: #ff6b6b; }
+        .nav-links a::after { content: ''; position: absolute; bottom: -5px; left: 0; width: 0; height: 2px; background: linear-gradient(45deg, #ff6b6b, #4ecdc4); transition: width 0.3s ease; }
+        .nav-links a:hover::after { width: 100%; }
+        .hero {
+            height: 100vh;
+            background: url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1200&q=80') center center/cover no-repeat;
+            color: #111;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(255,255,255,0.55);
+            z-index: 1;
+        }
+        .hero-content {
+            z-index: 2;
+            position: relative;
+        }
+        .hero h1 { font-size: 4rem; margin-bottom: 1rem; font-weight: 300; letter-spacing: 3px; }
+        .hero p { font-size: 1.3rem; margin-bottom: 2rem; opacity: 0.9; }
+        .cta-button { display: inline-block; padding: 1rem 2rem; background: #111; color: #fff; text-decoration: none; border-radius: 50px; font-weight: bold; transition: all 0.3s ease; text-transform: uppercase; letter-spacing: 1px; }
+        .cta-button:hover { transform: translateY(-3px); box-shadow: 0 10px 30px rgba(0,0,0,0.3); background: #333; }
+        .section { padding: 5rem 5%; max-width: 1200px; margin: 0 auto; }
+        .section h2 { font-size: 2.5rem; margin-bottom: 2rem; text-align: center; position: relative; }
+        .section h2::after { content: ''; position: absolute; bottom: -10px; left: 50%; transform: translateX(-50%); width: 50px; height: 3px; background: linear-gradient(45deg, #ff6b6b, #4ecdc4); }
+        .about-content { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: center; margin-top: 3rem; }
+        .about-text { font-size: 1.1rem; line-height: 1.8; }
+        .about-image { height: 400px; background: #f5f5f5; border-radius: 20px; position: relative; overflow: hidden; }
+        .about-image::before { content: '🏗️'; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 4rem; opacity: 0.7; }
+        .projects { background: transparent; }
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2.5rem;
+            margin-top: 3rem;
+        }
+        .project-card {
+            width: 370px;
+            background: #fff;
+            border-radius: 14px;
+            overflow: hidden;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.10);
+            margin: 0 auto 30px auto;
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.2s;
+        }
+        .project-image-container {
+            position: relative;
+            width: 100%;
+            height: 260px;
+            overflow: hidden;
+        }
+        .project-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s;
+        }
+        .project-card:hover .project-image {
+            transform: scale(1.05);
+        }
+        .project-hover {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.25);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 30px;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        .project-card:hover .project-hover {
+            opacity: 1;
+        }
+        .icon {
+            width: 38px;
+            height: 38px;
+            display: inline-block;
+            background-size: contain;
+            background-repeat: no-repeat;
+            cursor: pointer;
+        }
+        .icon.magnifier { background-image: url('icons/magnifier.svg'); }
+        .icon.link { background-image: url('icons/link.svg'); }
+        .icon.heart {
+            width: 20px;
+            height: 20px;
+            background-image: url('icons/heart.svg');
+        }
+        .project-info {
+            padding: 18px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .project-title {
+            font-size: 1.18em;
+            font-weight: bold;
+        }
+        .project-likes {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+        }
+        .project-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; opacity: 0; background: rgba(34,34,34,0.55); color: #fff; transition: opacity 0.4s; border-radius: 12px; text-align: center; padding: 1.2rem; }
+        .project-card:hover .project-image img { filter: blur(4px) brightness(0.7); }
+        .project-card:hover .project-overlay { opacity: 1; }
+        .project-overlay h3 { font-size: 1.3rem; margin-bottom: 0.5rem; color: #fff; }
+        .project-overlay p { font-size: 1rem; margin-bottom: 0.7rem; color: #eee; }
+        .project-overlay .project-tags { justify-content: center; }
+        .project-overlay .tag { background: #fff; color: #bfa97a; border: 1px solid #c8b08b; margin: 0 0.2rem; }
+        .project-content h3 { font-size: 1.4rem; color: #111; margin-bottom: 0.5rem; text-align: center; }
+        .project-content p { color: #444; font-size: 1.05rem; margin-bottom: 1rem; text-align: center; }
+        .project-tags { display: flex; flex-wrap: wrap; gap: 0.5rem; justify-content: center; }
+        .tag { background: #f5f5f5; color: #bfa97a; border: 1px solid #c8b08b; border-radius: 20px; font-size: 0.9rem; font-weight: 400; padding: 0.2rem 0.8rem; }
+        .services-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; margin-top: 3rem; }
+        .service-card { background: #fff; padding: 2rem; border-radius: 15px; text-align: center; box-shadow: 0 5px 15px rgba(0,0,0,0.1); transition: all 0.3s ease; border: 2px solid transparent; }
+        .service-card:hover { transform: translateY(-5px); border-color: #ff6b6b; box-shadow: 0 15px 30px rgba(0,0,0,0.2); }
+        .service-icon { font-size: 3rem; margin-bottom: 1rem; background: linear-gradient(45deg, #ff6b6b, #4ecdc4); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+        .contact { background: #faf9f6; color: #222; }
+        .contact-content { text-align: center; margin-top: 3rem; }
+        .contact-info { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 2rem; margin-top: 2rem; }
+        .contact-item { background: #f5f5f5; padding: 1.5rem; border-radius: 10px; backdrop-filter: blur(10px); }
+        .contact-item h4 { margin-bottom: 0.5rem; font-size: 1.2rem; }
+        footer { background: #faf9f6; color: #222; text-align: center; padding: 2rem; }
+        @media (max-width: 900px) { .about-content { grid-template-columns: 1fr; } .section { padding: 3rem 5%; } .hero h1 { font-size: 2.5rem; } }
+        #about.section { padding-top: 2rem; }
+        .contact-section {
+            background: linear-gradient(120deg, #f5f5f5 60%, #e9e4d5 100%);
+            border-radius: 20px;
+            box-shadow: 0 2px 16px rgba(0,0,0,0.04);
+            margin-bottom: 0;
+            margin-top: 3rem;
+            padding: 3rem 5% 2rem 5%;
+        }
+        .contact-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 3rem;
+            justify-content: center;
+            align-items: flex-start;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+        .contact-info-modern {
+            flex: 1;
+            min-width: 260px;
+            background: #fff;
+            border-radius: 16px;
+            box-shadow: 0 2px 12px #eee;
+            padding: 2rem 1.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1.1rem;
+        }
+        .contact-info-modern h3 {
+            margin-bottom: 1rem;
+            color: #bfa97a;
+            font-size: 1.3rem;
+        }
+        .contact-item {
+            font-size: 1.05rem;
+            display: flex;
+            align-items: center;
+            gap: 0.7rem;
+            color: #444;
+        }
+        .contact-icon {
+            font-size: 1.3rem;
+        }
+        .contact-social {
+            margin-top: 1.2rem;
+            display: flex;
+            gap: 1.2rem;
+        }
+        .social-link {
+            color: #bfa97a;
+            text-decoration: none;
+            font-weight: bold;
+            transition: color 0.2s;
+        }
+        .social-link:hover {
+            color: #ff6b6b;
+        }
+        .contact-form-modern {
+            flex: 1;
+            min-width: 260px;
+            background: #fff;
+            border-radius: 16px;
+            box-shadow: 0 2px 12px #eee;
+            padding: 2rem 1.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        .contact-form-modern h3 {
+            margin-bottom: 1rem;
+            color: #bfa97a;
+            font-size: 1.3rem;
+        }
+        .contact-form-modern input,
+        .contact-form-modern textarea {
+            padding: 0.7rem 1rem;
+            border: 1px solid #c8b08b;
+            border-radius: 8px;
+            font-size: 1rem;
+            background: #faf9f6;
+            resize: none;
+            transition: border 0.2s;
+        }
+        .contact-form-modern input:focus,
+        .contact-form-modern textarea:focus {
+            border: 1.5px solid #bfa97a;
+            outline: none;
+        }
+        .contact-form-modern button {
+            padding: 0.7rem 0;
+            background: linear-gradient(45deg, #bfa97a, #c8b08b);
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            font-weight: bold;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .contact-form-modern button:hover {
+            background: linear-gradient(45deg, #ff6b6b, #bfa97a);
+        }
+        @media (max-width: 900px) {
+            .contact-container { flex-direction: column; gap: 2rem; }
+        }
+        @media (max-width: 1200px) {
+            .projects-grid { grid-template-columns: repeat(2, 1fr); }
+            .project-card { width: 95%; }
+        }
+        @media (max-width: 700px) {
+            .projects-grid { grid-template-columns: 1fr; }
+            .project-card { width: 100%; }
+        }
+        .icon.heart.hearted {
+            filter: drop-shadow(0 0 2px #bfa97a);
+            background-image: url('icons/heart.svg');
+            background-color: #fffbe6;
+            border-radius: 50%;
+            box-shadow: 0 0 6px #bfa97a44;
+        }
+    </style>
+</head>
+<body>
+    <nav id="navbar">
+        <div class="nav-container">
+            <div class="logo">BERRA</div>
+            <ul class="nav-links">
+                <li><a href="#home">Ana Sayfa</a></li>
+                <li><a href="#about">Hakkımızda</a></li>
+                <li><a href="/projects">Projeler</a></li>
+                <li><a href="#services">Hizmetler</a></li>
+                <li><a href="#contact">İletişim</a></li>
+            </ul>
+        </div>
+    </nav>
+    <section id="home" class="hero">
+        <div class="hero-content">
+            <h1>MİMARİ MÜKEMMELLIK</h1>
+            <p>Geleceğin yapılarını bugün tasarlıyoruz</p>
+            <a href="#projects" class="cta-button">Projelerimizi Keşfedin</a>
+        </div>
+    </section>
+    <section id="about" class="section fade-in">
+        <h2>Hakkımızda</h2>
+        <div class="about-content">
+            <div class="about-text">
+                <p>Berra Mimarlık olarak, 15 yıllık deneyimimizle modern mimarinin sınırlarını zorlayan, sürdürülebilir ve işlevsel tasarımlar oluşturuyoruz. Her proje için özgün çözümler geliştirerek, müşterilerimizin hayallerini gerçeğe dönüştürüyoruz.</p>
+                <br>
+                <p>Uzman ekibimizle konut, ticari ve endüstriyel projelerde yenilikçi yaklaşımlar benimsiyor, çevreye saygılı ve enerji verimli yapılar tasarlıyoruz.</p>
+            </div>
+            <div class="about-image"></div>
+        </div>
+    </section>
+    <section id="projects" class="section projects fade-in">
+        <h2>Projelerimiz</h2>
+        <div class="projects-grid">
+            <% const defaultProjects = [
+                {id:1, name:'Teona Bungalov Otel', desc:'Doğanın kalbinde, rahatlık ve estetiği bir araya getirdik.', image:'/uploads/sample1.jpg', tags:['Bungalov','Otel']},
+                {id:2, name:'Ufuktepe Pazar Alanı', desc:'Modern pazar alanı tasarımı.', image:'/uploads/sample2.jpg', tags:['Pazar','Ticari']},
+                {id:3, name:'Yalı Konutları', desc:'Deniz kenarında lüks konutlar.', image:'/uploads/sample3.jpg', tags:['Konut','Lüks']},
+                {id:4, name:'Ofis Plaza', desc:'Çağdaş ofis binası.', image:'/uploads/sample4.jpg', tags:['Ofis','Ticari']},
+                {id:5, name:'Kent Parkı', desc:'Şehir merkezinde yeşil alan.', image:'/uploads/sample5.jpg', tags:['Park','Peyzaj']},
+                {id:6, name:'Rezidans Projesi', desc:'Modern rezidans yaşamı.', image:'/uploads/sample6.jpg', tags:['Rezidans','Konut']},
+                {id:7, name:'Kültür Merkezi', desc:'Sanat ve kültür için modern alan.', image:'/uploads/sample7.jpg', tags:['Kültür','Sanat']},
+                {id:8, name:'Eko Villa', desc:'Sürdürülebilir villa projesi.', image:'/uploads/sample8.jpg', tags:['Villa','Ekolojik']},
+            ];
+            const showProjects = (projects && projects.length > 0) ? projects : defaultProjects;
+            showProjects.forEach(function(p, idx){ %>
+            <div class="project-card">
+                <div class="project-image-container">
+                    <% if (p.image) { %>
+                        <img src="<%= p.image %>" alt="<%= p.name %>" class="project-image" id="project-img-<%= idx %>">
+                    <% } else { %>
+                        <span style="font-size:3rem; color:#bfa97a;">🏗️</span>
+                    <% } %>
+                    <div class="project-hover">
+                        <span class="icon magnifier" title="Büyüt" onclick="openModal('<%= p.image %>')"></span>
+                        <a href="/project/<%= p.id %>" class="icon link" title="Detay"></a>
+                    </div>
+                </div>
+                <div class="project-info">
+                    <div class="project-title"><%= p.name %></div>
+                    <div class="project-likes">
+                        <span class="icon heart" data-id="<%= p.id %>"></span>
+                        <span class="like-count" id="like-count-<%= p.id %>"><%= p.likes || 0 %></span>
+                    </div>
+                </div>
+            </div>
+            <% }) %>
+        </div>
+    </section>
+    <section id="services" class="section fade-in">
+        <h2>Hizmetlerimiz</h2>
+        <div class="services-grid">
+            <div class="service-card">
+                <div class="service-icon">🏗️</div>
+                <h3>Mimari Tasarım</h3>
+                <p>Özgün ve işlevsel mimari çözümler sunuyoruz.</p>
+            </div>
+            <div class="service-card">
+                <div class="service-icon">📐</div>
+                <h3>İç Mimari</h3>
+                <p>Yaşam alanlarınızı estetik ve fonksiyonel hale getiriyoruz.</p>
+            </div>
+            <div class="service-card">
+                <div class="service-icon">🌱</div>
+                <h3>Peyzaj Tasarımı</h3>
+                <p>Doğal ve sürdürülebilir peyzaj çözümleri geliştiriyoruz.</p>
+            </div>
+            <div class="service-card">
+                <div class="service-icon">⚡</div>
+                <h3>Akıllı Binalar</h3>
+                <p>Teknoloji destekli, enerji verimli bina sistemleri.</p>
+            </div>
+        </div>
+    </section>
+    <section id="maps" class="section fade-in">
+        <h2>Konumumuz</h2>
+        <div style="display:flex; justify-content:center;">
+            <iframe
+                src="https://www.google.com/maps?q=Balıkesir&output=embed"
+                width="100%" height="400" style="border:0; border-radius:16px; max-width:800px;"
+                allowfullscreen=""
+                loading="lazy"
+                referrerpolicy="no-referrer-when-downgrade">
+            </iframe>
+        </div>
+    </section>
+    <section id="contact" class="section contact-section">
+        <div class="contact-container">
+            <div class="contact-info-modern">
+                <h3>İletişim Bilgileri</h3>
+                <div class="contact-item"><span class="contact-icon">📍</span> Arkt Mimarlık, Ahlatlıbel Mah., 1902 Sok. No:44/3, Çankaya / ANKARA</div>
+                <div class="contact-item"><span class="contact-icon">📞</span> <a href="tel:+903123432333">+90 312 343 23 33</a></div>
+                <div class="contact-item"><span class="contact-icon">📱</span> <a href="tel:+905324352277">+90 532 435 22 77</a></div>
+                <div class="contact-item"><span class="contact-icon">✉️</span> <a href="mailto:info@arkt.com">info@arkt.com</a></div>
+                <div class="contact-social">
+                    <a href="#" title="Instagram" class="social-link">Instagram</a>
+                    <a href="#" title="LinkedIn" class="social-link">LinkedIn</a>
+                </div>
+            </div>
+            <form class="contact-form-modern" autocomplete="off">
+                <h3>Bize Ulaşın</h3>
+                <input type="text" name="name" placeholder="Adınız" required>
+                <input type="email" name="email" placeholder="E-posta" required>
+                <textarea name="message" placeholder="Mesajınız" required></textarea>
+                <button type="submit">Gönder</button>
+                <div class="form-message" style="display:none;"></div>
+            </form>
+        </div>
+    </section>
+    <footer>
+        <p>&copy; 2024 Berra Mimarlık. Tüm hakları saklıdır.</p>
+    </footer>
+    <!-- Modal for image zoom -->
+    <div id="imgModal" class="modal" style="display:none; position:fixed; z-index:9999; left:0; top:0; width:100vw; height:100vh; background:rgba(0,0,0,0.8); align-items:center; justify-content:center;">
+        <span onclick="closeModal()" style="position:absolute;top:30px;right:50px;font-size:3rem;color:#fff;cursor:pointer;">&times;</span>
+        <img id="modalImg" src="" style="max-width:80vw; max-height:80vh; border-radius:16px; box-shadow:0 2px 24px #000;">
+    </div>
+    <script>
+        // Navbar scroll effect
+        window.addEventListener('scroll', function() {
+            const navbar = document.getElementById('navbar');
+            if (window.scrollY > 100) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+        // Scroll animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+        const observer = new IntersectionObserver(function(entries) {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+        document.querySelectorAll('.fade-in').forEach(el => {
+            observer.observe(el);
+        });
+        // Project cards hover effect
+        document.querySelectorAll('.project-card').forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-10px) scale(1.02)';
+            });
+            card.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0) scale(1)';
+            });
+        });
+        // Service cards animation on scroll
+        document.querySelectorAll('.service-card').forEach((card, index) => {
+            card.style.animationDelay = `${index * 0.2}s`;
+        });
+        function openModal(src) {
+            document.getElementById('imgModal').style.display = 'flex';
+            document.getElementById('modalImg').src = src;
+        }
+        function closeModal() {
+            document.getElementById('imgModal').style.display = 'none';
+            document.getElementById('modalImg').src = '';
+        }
+        // Kalp işlemleri
+        function getHearted() {
+            return JSON.parse(localStorage.getItem('heartedProjects') || '[]');
+        }
+        function setHearted(arr) {
+            localStorage.setItem('heartedProjects', JSON.stringify(arr));
+        }
+        function updateHeartUI() {
+            const hearted = getHearted();
+            document.querySelectorAll('.icon.heart').forEach(icon => {
+                const id = icon.dataset.id;
+                if (hearted.includes(id)) {
+                    icon.classList.add('hearted');
+                } else {
+                    icon.classList.remove('hearted');
+                }
+            });
+        }
+        document.addEventListener('DOMContentLoaded', function() {
+            updateHeartUI();
+            document.querySelectorAll('.icon.heart').forEach(icon => {
+                icon.addEventListener('click', function() {
+                    const id = this.dataset.id;
+                    let hearted = getHearted();
+                    if (hearted.includes(id)) {
+                        // Unlike işlemi
+                        fetch('/api/unlike/' + id, { method: 'POST' })
+                            .then(r => r.json())
+                            .then(data => {
+                                if (!data.alreadyUnliked) {
+                                    hearted = hearted.filter(pid => pid !== id);
+                                    setHearted(hearted);
+                                    document.getElementById('like-count-' + id).textContent = data.likes;
+                                    this.classList.remove('hearted');
+                                }
+                            });
+                        return;
+                    }
+                    // Like işlemi
+                    fetch('/api/like/' + id, { method: 'POST' })
+                        .then(r => r.json())
+                        .then(data => {
+                            if (!data.alreadyLiked) {
+                                hearted.push(id);
+                                setHearted(hearted);
+                                document.getElementById('like-count-' + id).textContent = data.likes;
+                                this.classList.add('hearted');
+                            }
+                        });
+                });
+            });
+        });
+    </script>
+</body>
+</html> 

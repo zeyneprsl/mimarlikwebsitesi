@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <title>Proje Düzenle</title>
+    <style>
+    body {
+        font-family: sans-serif;
+        background: #faf9f6;
+        padding: 2rem;
+    }
+    .edit-container {
+        max-width: 1100px;
+        margin: 3rem auto;
+        background: #fff;
+        padding: 2.5rem 2.5rem 2rem 2.5rem;
+        border-radius: 18px;
+        box-shadow: 0 2px 16px #eee;
+    }
+    .edit-flex {
+        display: flex;
+        gap: 5.5rem;
+        margin-bottom: 2.5rem;
+    }
+    .edit-col {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        gap: 2.2rem;
+    }
+    input, textarea {
+        margin: 0;
+        padding: 0.7rem 1rem;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        width: 100%;
+        font-size: 1rem;
+        background: #faf9f6;
+        transition: border 0.2s;
+    }
+    input:focus, textarea:focus {
+        border: 1.5px solid #bfa97a;
+        outline: none;
+    }
+    button {
+        padding: 0.7rem 0;
+        background: linear-gradient(45deg, #bfa97a, #c8b08b);
+        color: #fff;
+        border: none;
+        border-radius: 8px;
+        font-weight: bold;
+        font-size: 1.1rem;
+        cursor: pointer;
+        transition: background 0.2s;
+        margin-top: 1rem;
+    }
+    button:hover {
+        background: linear-gradient(45deg, #ff6b6b, #bfa97a);
+    }
+    h2 {
+        text-align: center;
+        color: #bfa97a;
+        margin-bottom: 2rem;
+    }
+    h3 {
+        margin-bottom: 0.5rem;
+        margin-top: 1.5rem;
+        color: #bfa97a;
+        font-size: 1.15rem;
+    }
+    .edit-col label { font-size: 0.98rem; color: #888; margin-bottom: 0.2rem; }
+    @media (max-width: 1200px) {
+        .edit-container { max-width: 98vw; }
+        .edit-flex { gap: 2rem; }
+    }
+    @media (max-width: 900px) {
+        .edit-flex { flex-direction: column; gap: 1.5rem; }
+        .edit-container { padding: 1rem 0.5rem; }
+    }
+    </style>
+</head>
+<body>
+    <div class="edit-container">
+        <h2>Proje Düzenle</h2>
+        <form method="post" action="/admin/edit/<%= project.id %>" enctype="multipart/form-data">
+            <div class="edit-flex">
+                <div class="edit-col">
+                    <h3>Ana Sayfada Görünecek Bilgiler</h3>
+                    <label>Proje Adı</label>
+                    <input type="text" name="name" value="<%= project.name %>" required placeholder="Proje Adı">
+                    <label>Açıklama</label>
+                    <textarea name="desc" required placeholder="Açıklama"><%= project.desc %></textarea>
+                    <label>Etiketler (virgülle)</label>
+                    <input type="text" name="tags" value="<%= project.tags.join(', ') %>" placeholder="Etiketler (virgülle)">
+                    <label>Resim Yükle</label>
+                    <input type="file" name="imageFile">
+                    <span style="font-size:0.95rem; color:#888;">veya</span>
+                    <input type="text" name="imageUrl" value="<%= project.image %>" placeholder="Ana Görsel Linki (Ana sayfa kartında görünür)">
+                </div>
+                <div class="edit-col">
+                    <h3>Detay Ekranında Görünecek Ek Bilgiler</h3>
+                    <label>Başlık Görseli Linki (Detay sayfa üst görseli)</label>
+                    <input type="text" name="headerImage" value="<%= project.headerImage || '' %>">
+                    <label>Detay Ana Görsel Linki (Büyük görsel)</label>
+                    <input type="text" name="mainImage" value="<%= project.mainImage || '' %>">
+                    <label>Yıl (Detayda görünür)</label>
+                    <input type="text" name="year" value="<%= project.year || '' %>">
+                    <label>Şehir (Detayda görünür)</label>
+                    <input type="text" name="city" value="<%= project.city || '' %>">
+                    <label>Galeri Görselleri (virgülle, detayda küçük galeri olarak görünür)</label>
+                    <input type="text" name="gallery" value="<%= (project.gallery || []).join(', ') %>">
+                </div>
+            </div>
+            <button type="submit">Kaydet</button>
+        </form>
+        <br><a href="/admin/panel">Panele Dön</a>
+    </div>
+</body>
+</html> 

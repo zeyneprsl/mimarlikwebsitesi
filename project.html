@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Proje Detayı - Berra Mimarlık</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .project-detail {
+            padding-top: 100px;
+            min-height: 100vh;
+            background: #faf9f6;
+        }
+        
+        .project-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 4rem 5%;
+            text-align: center;
+        }
+        
+        .project-header h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            font-weight: 300;
+        }
+        
+        .project-header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .project-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 3rem 5%;
+        }
+        
+        .project-gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+        
+        .gallery-item {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+        
+        .gallery-item:hover {
+            transform: translateY(-5px);
+        }
+        
+        .gallery-item img {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+        }
+        
+        .project-info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+        
+        .info-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        
+        .info-card h3 {
+            color: #bfa97a;
+            margin-bottom: 1rem;
+        }
+        
+        .back-button {
+            display: inline-block;
+            padding: 1rem 2rem;
+            background: #bfa97a;
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: bold;
+            margin-bottom: 2rem;
+            transition: all 0.3s ease;
+        }
+        
+        .back-button:hover {
+            background: #a8946a;
+            transform: translateY(-2px);
+        }
+        
+        @media (max-width: 768px) {
+            .project-header h1 {
+                font-size: 2rem;
+            }
+            
+            .project-content {
+                padding: 2rem 5%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav id="navbar">
+        <div class="nav-container">
+            <div class="logo">BERRA</div>
+            <ul class="nav-links">
+                <li><a href="index.html">Ana Sayfa</a></li>
+                <li><a href="index.html#about">Hakkımızda</a></li>
+                <li><a href="index.html#projects">Projeler</a></li>
+                <li><a href="index.html#services">Hizmetler</a></li>
+                <li><a href="index.html#contact">İletişim</a></li>
+            </ul>
+        </div>
+    </nav>
+    
+    <div class="project-detail">
+        <div class="project-header">
+            <h1 id="projectTitle">Proje Detayı</h1>
+            <p id="projectDesc">Proje açıklaması burada yer alacak</p>
+        </div>
+        
+        <div class="project-content">
+            <a href="index.html" class="back-button">← Ana Sayfaya Dön</a>
+            
+            <div class="project-info-grid">
+                <div class="info-card">
+                    <h3>Proje Türü</h3>
+                    <p id="projectType">Mimari Tasarım</p>
+                </div>
+                <div class="info-card">
+                    <h3>Konum</h3>
+                    <p id="projectLocation">Balıkesir</p>
+                </div>
+                <div class="info-card">
+                    <h3>Yıl</h3>
+                    <p id="projectYear">2024</p>
+                </div>
+                <div class="info-card">
+                    <h3>Durum</h3>
+                    <p id="projectStatus">Tamamlandı</p>
+                </div>
+            </div>
+            
+            <div class="project-gallery" id="projectGallery">
+                <!-- Galeri resimleri buraya yüklenecek -->
+            </div>
+            
+            <div class="project-description">
+                <h2>Proje Hakkında</h2>
+                <p id="projectFullDesc">Detaylı proje açıklaması burada yer alacak. Bu proje, modern mimari prensiplerini kullanarak tasarlanmış olup, sürdürülebilirlik ve işlevsellik ön planda tutulmuştur.</p>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // URL'den proje ID'sini al
+        const urlParams = new URLSearchParams(window.location.search);
+        const projectId = urlParams.get('id') || '1';
+        
+        // Proje verilerini yükle
+        async function loadProjectDetails() {
+            try {
+                const response = await fetch('/.netlify/functions/projects');
+                if (response.ok) {
+                    const projects = await response.json();
+                    const project = projects.find(p => p.id == projectId);
+                    if (project) {
+                        displayProject(project);
+                    } else {
+                        displayDefaultProject();
+                    }
+                } else {
+                    displayDefaultProject();
+                }
+            } catch (error) {
+                console.log('Proje detayları yüklenemedi:', error);
+                displayDefaultProject();
+            }
+        }
+        
+        function displayProject(project) {
+            document.getElementById('projectTitle').textContent = project.name;
+            document.getElementById('projectDesc').textContent = project.desc;
+            document.getElementById('projectType').textContent = project.tags ? project.tags.join(', ') : 'Mimari Tasarım';
+            document.getElementById('projectLocation').textContent = project.city || 'Balıkesir';
+            document.getElementById('projectYear').textContent = project.year || '2024';
+            document.getElementById('projectStatus').textContent = 'Tamamlandı';
+            document.getElementById('projectFullDesc').textContent = project.desc;
+            
+            // Galeri resimlerini yükle
+            const gallery = document.getElementById('projectGallery');
+            if (project.gallery && project.gallery.length > 0) {
+                gallery.innerHTML = project.gallery.map(img => `
+                    <div class="gallery-item">
+                        <img src="${img}" alt="${project.name}">
+                    </div>
+                `).join('');
+            } else if (project.image) {
+                gallery.innerHTML = `
+                    <div class="gallery-item">
+                        <img src="${project.image}" alt="${project.name}">
+                    </div>
+                `;
+            }
+        }
+        
+        function displayDefaultProject() {
+            const defaultProject = {
+                name: 'Teona Bungalov Otel',
+                desc: 'Doğanın kalbinde, rahatlık ve estetiği bir araya getirdik. Bu proje, modern mimari prensiplerini kullanarak tasarlanmış olup, sürdürülebilirlik ve işlevsellik ön planda tutulmuştur.',
+                tags: ['Bungalov', 'Otel'],
+                city: 'Balıkesir',
+                year: '2024',
+                image: '/uploads/sample-main.jpg'
+            };
+            displayProject(defaultProject);
+        }
+        
+        // Sayfa yüklendiğinde proje detaylarını yükle
+        document.addEventListener('DOMContentLoaded', function() {
+            loadProjectDetails();
+        });
+    </script>
+</body>
+</html>

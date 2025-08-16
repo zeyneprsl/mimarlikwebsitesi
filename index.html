@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Berra Mimarlık</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <nav id="navbar">
+        <div class="nav-container">
+            <div class="logo">BERRA</div>
+            <ul class="nav-links">
+                <li><a href="#home">Ana Sayfa</a></li>
+                <li><a href="#about">Hakkımızda</a></li>
+                <li><a href="#projects">Projeler</a></li>
+                <li><a href="#services">Hizmetler</a></li>
+                <li><a href="#contact">İletişim</a></li>
+            </ul>
+        </div>
+    </nav>
+    
+    <section id="home" class="hero">
+        <div class="hero-content">
+            <h1>MİMARİ MÜKEMMELLIK</h1>
+            <p>Geleceğin yapılarını bugün tasarlıyoruz</p>
+            <a href="#projects" class="cta-button">Projelerimizi Keşfedin</a>
+        </div>
+    </section>
+    
+    <section id="about" class="section fade-in">
+        <h2>Hakkımızda</h2>
+        <div class="about-content">
+            <div class="about-text">
+                <p>Berra Mimarlık olarak, 15 yıllık deneyimimizle modern mimarinin sınırlarını zorlayan, sürdürülebilir ve işlevsel tasarımlar oluşturuyoruz. Her proje için özgün çözümler geliştirerek, müşterilerimizin hayallerini gerçeğe dönüştürüyoruz.</p>
+                <br>
+                <p>Uzman ekibimizle konut, ticari ve endüstriyel projelerde yenilikçi yaklaşımlar benimsiyor, çevreye saygılı ve enerji verimli yapılar tasarlıyoruz.</p>
+            </div>
+            <div class="about-image"></div>
+        </div>
+    </section>
+    
+    <section id="projects" class="section projects fade-in">
+        <h2>Projelerimiz</h2>
+        <div class="projects-grid" id="projectsGrid">
+            <!-- Projeler JavaScript ile yüklenecek -->
+        </div>
+    </section>
+    
+    <section id="services" class="section fade-in">
+        <h2>Hizmetlerimiz</h2>
+        <div class="services-grid">
+            <div class="service-card">
+                <div class="service-icon">🏗️</div>
+                <h3>Mimari Tasarım</h3>
+                <p>Özgün ve işlevsel mimari çözümler sunuyoruz.</p>
+            </div>
+            <div class="service-card">
+                <div class="service-icon">📐</div>
+                <h3>İç Mimari</h3>
+                <p>Yaşam alanlarınızı estetik ve fonksiyonel hale getiriyoruz.</p>
+            </div>
+            <div class="service-card">
+                <div class="service-icon">🌱</div>
+                <h3>Peyzaj Tasarımı</h3>
+                <p>Doğal ve sürdürülebilir peyzaj çözümleri geliştiriyoruz.</p>
+            </div>
+            <div class="service-card">
+                <div class="service-icon">⚡</div>
+                <h3>Akıllı Binalar</h3>
+                <p>Teknoloji destekli, enerji verimli bina sistemleri.</p>
+            </div>
+        </div>
+    </section>
+    
+    <section id="maps" class="section fade-in">
+        <h2>Konumumuz</h2>
+        <div style="display:flex; justify-content:center;">
+            <iframe
+                src="https://www.google.com/maps?q=Balıkesir&output=embed"
+                width="100%" height="400" style="border:0; border-radius:16px; max-width:800px;"
+                allowfullscreen=""
+                loading="lazy"
+                referrerpolicy="no-referrer-when-downgrade">
+            </iframe>
+        </div>
+    </section>
+    
+    <section id="contact" class="section contact-section">
+        <div class="contact-container">
+            <div class="contact-info-modern">
+                <h3>İletişim Bilgileri</h3>
+                <div class="contact-item"><span class="contact-icon">📍</span> Arkt Mimarlık, Ahlatlıbel Mah., 1902 Sok. No:44/3, Çankaya / ANKARA</div>
+                <div class="contact-item"><span class="contact-icon">📞</span> <a href="tel:+903123432333">+90 312 343 23 33</a></div>
+                <div class="contact-item"><span class="contact-icon">📱</span> <a href="tel:+905324352277">+90 532 435 22 77</a></div>
+                <div class="contact-item"><span class="contact-icon">✉️</span> <a href="mailto:info@arkt.com">info@arkt.com</a></div>
+                <div class="contact-social">
+                    <a href="#" title="Instagram" class="social-link">Instagram</a>
+                    <a href="#" title="LinkedIn" class="social-link">LinkedIn</a>
+                </div>
+            </div>
+            <form class="contact-form-modern" autocomplete="off">
+                <h3>Bize Ulaşın</h3>
+                <input type="text" name="name" placeholder="Adınız" required>
+                <input type="email" name="email" placeholder="E-posta" required>
+                <textarea name="message" placeholder="Mesajınız" required></textarea>
+                <button type="submit">Gönder</button>
+                <div class="form-message" style="display:none;"></div>
+            </form>
+        </div>
+    </section>
+    
+    <footer>
+        <p>&copy; 2024 Berra Mimarlık. Tüm hakları saklıdır.</p>
+    </footer>
+    
+    <!-- Modal for image zoom -->
+    <div id="imgModal" class="modal" style="display:none; position:fixed; z-index:9999; left:0; top:0; width:100vw; height:100vh; background:rgba(0,0,0,0.8); align-items:center; justify-content:center;">
+        <span onclick="closeModal()" style="position:absolute;top:30px;right:50px;font-size:3rem;color:#fff;cursor:pointer;">&times;</span>
+        <img id="modalImg" src="" style="max-width:80vw; max-height:80vh; border-radius:16px; box-shadow:0 2px 24px #000;">
+    </div>
+    
+    <script src="script.js"></script>
+</body>
+</html> 

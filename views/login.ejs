@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Giriş</title>
+    <style>body{font-family:sans-serif;background:#faf9f6;text-align:center;padding:5rem;}form{display:inline-block;background:#fff;padding:2rem 3rem;border-radius:12px;box-shadow:0 2px 12px #eee;}input{margin:1rem 0;padding:0.5rem 1rem;border:1px solid #ccc;border-radius:6px;}button{padding:0.5rem 2rem;border:none;background:#bfa97a;color:#fff;border-radius:6px;font-weight:bold;cursor:pointer;}button:hover{background:#a68b5b;}</style>
+</head>
+<body>
+    <h2>Admin Paneli Giriş</h2>
+    <% if (typeof error !== 'undefined') { %><p style="color:red"><%= error %></p><% } %>
+    <form method="post" action="/admin">
+        <input type="password" name="password" placeholder="Şifre" required><br>
+        <button type="submit">Giriş Yap</button>
+    </form>
+</body>
+</html> 
