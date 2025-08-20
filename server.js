@@ -8,6 +8,7 @@ const cookieParser = require('cookie-parser');
 const session = require('express-session');
 
 const app = express();
+app.set('trust proxy', 1);
 const PORT = process.env.PORT || 3001;
 
 app.use(cors());
@@ -25,7 +26,12 @@ app.use('/icons', express.static(path.join(__dirname, 'icons')));
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
-const upload = multer({ dest: 'uploads/' });
+// Ensure uploads dir exists (Render'da yoksa hata veriyor)
+const UPLOADS_DIR = path.join(__dirname, 'uploads');
+if (!fs.existsSync(UPLOADS_DIR)) {
+    try { fs.mkdirSync(UPLOADS_DIR, { recursive: true }); } catch (e) { console.error('Uploads dir create error:', e); }
+}
+const upload = multer({ dest: UPLOADS_DIR, limits: { fileSize: 8 * 1024 * 1024 } });
 const PROJECTS_FILE = path.join(__dirname, 'data', 'projects.json');
 const SETTINGS_FILE = path.join(__dirname, 'data', 'settings.json');
 
@@ -259,3 +265,10 @@ app.get('/project/:id', (req, res) => {
 app.listen(PORT, () => {
     console.log('Server running on http://localhost:' + PORT);
 }); 
+
+// Basit hata yakalayıcı (Render 502 yerine log ve 500 döndürsün)
+// eslint-disable-next-line no-unused-vars
+app.use((err, req, res, next) => {
+    console.error('Unhandled error:', err);
+    res.status(500).send('Internal Server Error');
+});
