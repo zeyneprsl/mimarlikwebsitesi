@@ -339,26 +339,18 @@
     <section id="services" class="section fade-in">
         <h2>Hizmetlerimiz</h2>
         <div class="services-grid">
+            <% const servicesList = (settings && settings.services && settings.services.length) ? settings.services : [
+                { icon: '🏗️', title: 'Mimari Tasarım', desc: 'Özgün ve işlevsel mimari çözümler sunuyoruz.' },
+                { icon: '📐', title: 'İç Mimari', desc: 'Yaşam alanlarınızı estetik ve fonksiyonel hale getiriyoruz.' },
+                { icon: '🌱', title: 'Peyzaj Tasarımı', desc: 'Doğal ve sürdürülebilir peyzaj çözümleri geliştiriyoruz.' },
+                { icon: '⚡', title: 'Akıllı Binalar', desc: 'Teknoloji destekli, enerji verimli bina sistemleri.' }
+            ]; servicesList.forEach(function(s){ %>
             <div class="service-card">
-                <div class="service-icon">🏗️</div>
-                <h3>Mimari Tasarım</h3>
-                <p>Özgün ve işlevsel mimari çözümler sunuyoruz.</p>
+                <div class="service-icon"><%= s.icon %></div>
+                <h3><%= s.title %></h3>
+                <p><%= s.desc %></p>
             </div>
-            <div class="service-card">
-                <div class="service-icon">📐</div>
-                <h3>İç Mimari</h3>
-                <p>Yaşam alanlarınızı estetik ve fonksiyonel hale getiriyoruz.</p>
-            </div>
-            <div class="service-card">
-                <div class="service-icon">🌱</div>
-                <h3>Peyzaj Tasarımı</h3>
-                <p>Doğal ve sürdürülebilir peyzaj çözümleri geliştiriyoruz.</p>
-            </div>
-            <div class="service-card">
-                <div class="service-icon">⚡</div>
-                <h3>Akıllı Binalar</h3>
-                <p>Teknoloji destekli, enerji verimli bina sistemleri.</p>
-            </div>
+            <% }) %>
         </div>
     </section>
     <section id="maps" class="section fade-in">

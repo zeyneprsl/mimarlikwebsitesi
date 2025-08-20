@@ -50,7 +50,13 @@ function defaultSettings() {
         email: 'info@arkt.com',
         instagramUrl: '#',
         linkedinUrl: '#',
-        mapEmbedUrl: 'https://www.google.com/maps?q=Balıkesir&output=embed'
+        mapEmbedUrl: 'https://www.google.com/maps?q=Balıkesir&output=embed',
+        services: [
+            { icon: '🏗️', title: 'Mimari Tasarım', desc: 'Özgün ve işlevsel mimari çözümler sunuyoruz.' },
+            { icon: '📐', title: 'İç Mimari', desc: 'Yaşam alanlarınızı estetik ve fonksiyonel hale getiriyoruz.' },
+            { icon: '🌱', title: 'Peyzaj Tasarımı', desc: 'Doğal ve sürdürülebilir peyzaj çözümleri geliştiriyoruz.' },
+            { icon: '⚡', title: 'Akıllı Binalar', desc: 'Teknoloji destekli, enerji verimli bina sistemleri.' }
+        ]
     };
 }
 function readSettings() {
@@ -66,6 +72,16 @@ function readSettings() {
 function writeSettings(settings) {
     const merged = { ...defaultSettings(), ...settings };
     fs.writeFileSync(SETTINGS_FILE, JSON.stringify(merged, null, 2));
+}
+
+function parseServicesInput(servicesInput, currentServices) {
+    if (!servicesInput) return currentServices || defaultSettings().services;
+    const lines = servicesInput.split(/\r?\n/).map(l => l.trim()).filter(Boolean);
+    const parsed = lines.map(l => {
+        const [icon, title, desc] = l.split('|');
+        return { icon: (icon || '').trim(), title: (title || '').trim(), desc: (desc || '').trim() };
+    }).filter(s => s.title);
+    return parsed.length ? parsed : (currentServices || defaultSettings().services);
 }
 
 // Basit oturum kontrolü
@@ -100,8 +116,10 @@ app.get('/admin/panel', requireAuth, (req, res) => {
 
 // Site Ayarları Kaydet
 app.post('/admin/settings', requireAuth, (req, res) => {
-    const { heroBackgroundUrl, heroTitle, heroSubtitle, aboutTitle, aboutText, contactAddress, phonePrimary, phoneSecondary, email, instagramUrl, linkedinUrl, mapEmbedUrl } = req.body;
-    writeSettings({ heroBackgroundUrl, heroTitle, heroSubtitle, aboutTitle, aboutText, contactAddress, phonePrimary, phoneSecondary, email, instagramUrl, linkedinUrl, mapEmbedUrl });
+    const current = readSettings();
+    const { heroBackgroundUrl, heroTitle, heroSubtitle, aboutTitle, aboutText, contactAddress, phonePrimary, phoneSecondary, email, instagramUrl, linkedinUrl, mapEmbedUrl, servicesInput } = req.body;
+    const services = parseServicesInput(servicesInput, current.services);
+    writeSettings({ heroBackgroundUrl, heroTitle, heroSubtitle, aboutTitle, aboutText, contactAddress, phonePrimary, phoneSecondary, email, instagramUrl, linkedinUrl, mapEmbedUrl, services });
     res.redirect('/admin/panel');
 });
 

@@ -56,6 +56,8 @@
                 <input type="text" name="linkedinUrl" value="<%= (settings && settings.linkedinUrl) || '' %>">
                 <label>Google Maps Embed URL</label>
                 <input type="text" name="mapEmbedUrl" value="<%= (settings && settings.mapEmbedUrl) || '' %>">
+                <label>Hizmetler (her satır: ikon|başlık|açıklama)</label>
+                <textarea name="servicesInput" rows="6" placeholder="🏗️|Mimari Tasarım|Özgün ve işlevsel mimari çözümler sunuyoruz."><%= (settings && settings.services ? settings.services.map(s=>`${s.icon}|${s.title}|${s.desc}`).join('\n') : '') %></textarea>
                 <button type="submit">Ayarları Kaydet</button>
             </div>
         </div>
