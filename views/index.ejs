@@ -365,7 +365,7 @@
         <h2>Konumumuz</h2>
         <div style="display:flex; justify-content:center;">
             <iframe
-                src="https://www.google.com/maps?q=Balıkesir&output=embed"
+                src="<%= (settings && settings.mapEmbedUrl) || 'https://www.google.com/maps?q=Balıkesir&output=embed' %>"
                 width="100%" height="400" style="border:0; border-radius:16px; max-width:800px;"
                 allowfullscreen=""
                 loading="lazy"
@@ -377,13 +377,13 @@
         <div class="contact-container">
             <div class="contact-info-modern">
                 <h3>İletişim Bilgileri</h3>
-                <div class="contact-item"><span class="contact-icon">📍</span> Arkt Mimarlık, Ahlatlıbel Mah., 1902 Sok. No:44/3, Çankaya / ANKARA</div>
-                <div class="contact-item"><span class="contact-icon">📞</span> <a href="tel:+903123432333">+90 312 343 23 33</a></div>
-                <div class="contact-item"><span class="contact-icon">📱</span> <a href="tel:+905324352277">+90 532 435 22 77</a></div>
-                <div class="contact-item"><span class="contact-icon">✉️</span> <a href="mailto:info@arkt.com">info@arkt.com</a></div>
+                <div class="contact-item"><span class="contact-icon">📍</span> <%= (settings && settings.contactAddress) || '' %></div>
+                <div class="contact-item"><span class="contact-icon">📞</span> <a href="tel:<%= (settings && settings.phonePrimary) || '' %>"><%= (settings && settings.phonePrimary) || '' %></a></div>
+                <div class="contact-item"><span class="contact-icon">📱</span> <a href="tel:<%= (settings && settings.phoneSecondary) || '' %>"><%= (settings && settings.phoneSecondary) || '' %></a></div>
+                <div class="contact-item"><span class="contact-icon">✉️</span> <a href="mailto:<%= (settings && settings.email) || '' %>"><%= (settings && settings.email) || '' %></a></div>
                 <div class="contact-social">
-                    <a href="#" title="Instagram" class="social-link">Instagram</a>
-                    <a href="#" title="LinkedIn" class="social-link">LinkedIn</a>
+                    <a href="<%= (settings && settings.instagramUrl) || '#' %>" title="Instagram" class="social-link" target="_blank">Instagram</a>
+                    <a href="<%= (settings && settings.linkedinUrl) || '#' %>" title="LinkedIn" class="social-link" target="_blank">LinkedIn</a>
                 </div>
             </div>
             <form class="contact-form-modern" autocomplete="off">

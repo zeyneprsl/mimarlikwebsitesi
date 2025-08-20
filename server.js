@@ -43,7 +43,14 @@ function defaultSettings() {
         heroTitle: 'MİMARİ MÜKEMMELLİK',
         heroSubtitle: 'Geleceğin yapılarını bugün tasarlıyoruz',
         aboutTitle: 'Hakkımızda',
-        aboutText: 'Berra Mimarlık olarak, 15 yıllık deneyimimizle modern mimarinin sınırlarını zorlayan, sürdürülebilir ve işlevsel tasarımlar oluşturuyoruz.\nUzman ekibimizle konut, ticari ve endüstriyel projelerde yenilikçi yaklaşımlar benimsiyor, çevreye saygılı ve enerji verimli yapılar tasarlıyoruz.'
+        aboutText: 'Berra Mimarlık olarak, 15 yıllık deneyimimizle modern mimarinin sınırlarını zorlayan, sürdürülebilir ve işlevsel tasarımlar oluşturuyoruz.\nUzman ekibimizle konut, ticari ve endüstriyel projelerde yenilikçi yaklaşımlar benimsiyor, çevreye saygılı ve enerji verimli yapılar tasarlıyoruz.',
+        contactAddress: 'Arkt Mimarlık, Ahlatlıbel Mah., 1902 Sok. No:44/3, Çankaya / ANKARA',
+        phonePrimary: '+90 312 343 23 33',
+        phoneSecondary: '+90 532 435 22 77',
+        email: 'info@arkt.com',
+        instagramUrl: '#',
+        linkedinUrl: '#',
+        mapEmbedUrl: 'https://www.google.com/maps?q=Balıkesir&output=embed'
     };
 }
 function readSettings() {
@@ -93,8 +100,8 @@ app.get('/admin/panel', requireAuth, (req, res) => {
 
 // Site Ayarları Kaydet
 app.post('/admin/settings', requireAuth, (req, res) => {
-    const { heroBackgroundUrl, heroTitle, heroSubtitle, aboutTitle, aboutText } = req.body;
-    writeSettings({ heroBackgroundUrl, heroTitle, heroSubtitle, aboutTitle, aboutText });
+    const { heroBackgroundUrl, heroTitle, heroSubtitle, aboutTitle, aboutText, contactAddress, phonePrimary, phoneSecondary, email, instagramUrl, linkedinUrl, mapEmbedUrl } = req.body;
+    writeSettings({ heroBackgroundUrl, heroTitle, heroSubtitle, aboutTitle, aboutText, contactAddress, phonePrimary, phoneSecondary, email, instagramUrl, linkedinUrl, mapEmbedUrl });
     res.redirect('/admin/panel');
 });
 

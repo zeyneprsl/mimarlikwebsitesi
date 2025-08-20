@@ -40,6 +40,22 @@
                 <input type="text" name="aboutTitle" value="<%= (settings && settings.aboutTitle) || '' %>" placeholder="Hakkımızda">
                 <label>Hakkımızda Metin</label>
                 <textarea name="aboutText" rows="5" placeholder="Hakkımızda metni"><%= (settings && settings.aboutText) || '' %></textarea>
+                <hr style="margin:1rem 0; opacity:0.3">
+                <h3>İletişim & Konum</h3>
+                <label>Adres</label>
+                <input type="text" name="contactAddress" value="<%= (settings && settings.contactAddress) || '' %>">
+                <label>Telefon 1</label>
+                <input type="text" name="phonePrimary" value="<%= (settings && settings.phonePrimary) || '' %>">
+                <label>Telefon 2</label>
+                <input type="text" name="phoneSecondary" value="<%= (settings && settings.phoneSecondary) || '' %>">
+                <label>E-posta</label>
+                <input type="email" name="email" value="<%= (settings && settings.email) || '' %>">
+                <label>Instagram URL</label>
+                <input type="text" name="instagramUrl" value="<%= (settings && settings.instagramUrl) || '' %>">
+                <label>LinkedIn URL</label>
+                <input type="text" name="linkedinUrl" value="<%= (settings && settings.linkedinUrl) || '' %>">
+                <label>Google Maps Embed URL</label>
+                <input type="text" name="mapEmbedUrl" value="<%= (settings && settings.mapEmbedUrl) || '' %>">
                 <button type="submit">Ayarları Kaydet</button>
             </div>
         </div>
