@@ -52,6 +52,7 @@ nav { position: fixed; top: 0; width: 100%; padding: 1rem 5%; background: #fff; 
     grid-template-columns: repeat(4, 1fr);
     gap: 2.5rem;
     margin-top: 3rem;
+    justify-items: center; /* kartları hücre içinde ortala */
 }
 .project-card {
     width: 370px;
