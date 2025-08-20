@@ -35,6 +35,11 @@
                 <input type="text" name="heroTitle" value="<%= (settings && settings.heroTitle) || '' %>" placeholder="MİMARİ MÜKEMMELLİK">
                 <label>Hero Alt Başlık</label>
                 <input type="text" name="heroSubtitle" value="<%= (settings && settings.heroSubtitle) || '' %>" placeholder="Geleceğin yapılarını bugün tasarlıyoruz">
+                <hr style="margin:1rem 0; opacity:0.3">
+                <label>Hakkımızda Başlık</label>
+                <input type="text" name="aboutTitle" value="<%= (settings && settings.aboutTitle) || '' %>" placeholder="Hakkımızda">
+                <label>Hakkımızda Metin</label>
+                <textarea name="aboutText" rows="5" placeholder="Hakkımızda metni"><%= (settings && settings.aboutText) || '' %></textarea>
                 <button type="submit">Ayarları Kaydet</button>
             </div>
         </div>

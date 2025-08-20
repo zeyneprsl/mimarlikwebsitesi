@@ -290,12 +290,10 @@
         </div>
     </section>
     <section id="about" class="section fade-in">
-        <h2>Hakkımızda</h2>
+        <h2><%= (settings && settings.aboutTitle) || 'Hakkımızda' %></h2>
         <div class="about-content">
             <div class="about-text">
-                <p>Berra Mimarlık olarak, 15 yıllık deneyimimizle modern mimarinin sınırlarını zorlayan, sürdürülebilir ve işlevsel tasarımlar oluşturuyoruz. Her proje için özgün çözümler geliştirerek, müşterilerimizin hayallerini gerçeğe dönüştürüyoruz.</p>
-                <br>
-                <p>Uzman ekibimizle konut, ticari ve endüstriyel projelerde yenilikçi yaklaşımlar benimsiyor, çevreye saygılı ve enerji verimli yapılar tasarlıyoruz.</p>
+                <p style="white-space: pre-line;"><%= (settings && settings.aboutText) || '' %></p>
             </div>
             <div class="about-image"></div>
         </div>

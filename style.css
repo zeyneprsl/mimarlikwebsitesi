@@ -49,13 +49,15 @@ nav { position: fixed; top: 0; width: 100%; padding: 1rem 5%; background: #fff; 
 .projects { background: transparent; }
 .projects-grid {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 2.5rem;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
     margin-top: 3rem;
-    justify-items: center; /* kartları hücre içinde ortala */
+    justify-items: center;
+    width: 100%;
 }
 .project-card {
-    width: 370px;
+    width: 100%;
+    max-width: 370px;
     background: #fff;
     border-radius: 14px;
     overflow: hidden;

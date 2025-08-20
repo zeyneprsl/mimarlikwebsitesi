@@ -41,7 +41,9 @@ function defaultSettings() {
     return {
         heroBackgroundUrl: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1200&q=80',
         heroTitle: 'MİMARİ MÜKEMMELLİK',
-        heroSubtitle: 'Geleceğin yapılarını bugün tasarlıyoruz'
+        heroSubtitle: 'Geleceğin yapılarını bugün tasarlıyoruz',
+        aboutTitle: 'Hakkımızda',
+        aboutText: 'Berra Mimarlık olarak, 15 yıllık deneyimimizle modern mimarinin sınırlarını zorlayan, sürdürülebilir ve işlevsel tasarımlar oluşturuyoruz.\nUzman ekibimizle konut, ticari ve endüstriyel projelerde yenilikçi yaklaşımlar benimsiyor, çevreye saygılı ve enerji verimli yapılar tasarlıyoruz.'
     };
 }
 function readSettings() {
@@ -91,8 +93,8 @@ app.get('/admin/panel', requireAuth, (req, res) => {
 
 // Site Ayarları Kaydet
 app.post('/admin/settings', requireAuth, (req, res) => {
-    const { heroBackgroundUrl, heroTitle, heroSubtitle } = req.body;
-    writeSettings({ heroBackgroundUrl, heroTitle, heroSubtitle });
+    const { heroBackgroundUrl, heroTitle, heroSubtitle, aboutTitle, aboutText } = req.body;
+    writeSettings({ heroBackgroundUrl, heroTitle, heroSubtitle, aboutTitle, aboutText });
     res.redirect('/admin/panel');
 });
 
@@ -195,6 +197,11 @@ app.post('/api/unlike/:id', (req, res) => {
 // API: Projeleri JSON olarak döndür (likes ile birlikte)
 app.get('/api/projects', (req, res) => {
     res.json(readProjects());
+});
+
+// API: Site ayarları (hero/about)
+app.get('/api/settings', (req, res) => {
+    res.json(readSettings());
 });
 
 // Ana sayfa: Projeleri dinamik olarak göster
