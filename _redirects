@@ -1,0 +1,2 @@
+/admin/* https://berra-admin.onrender.com/admin/:splat 200!
+/admin https://berra-admin.onrender.com/admin 200!
