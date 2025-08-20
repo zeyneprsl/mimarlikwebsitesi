@@ -1,0 +1,12 @@
+services:
+  - type: web
+    name: berra-admin
+    env: node
+    plan: free
+    buildCommand: npm install
+    startCommand: node server.js
+    autoDeploy: true
+    region: frankfurt
+    envVars:
+      - key: NODE_VERSION
+        value: 18
