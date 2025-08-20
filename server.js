@@ -88,6 +88,14 @@ function writeSettings(settings) {
     fs.writeFileSync(SETTINGS_FILE_RUNTIME, JSON.stringify(merged, null, 2));
 }
 
+function normalizeWebUrl(url) {
+    if (!url) return '';
+    const t = ('' + url).trim();
+    if (!t) return '';
+    if (/^https?:\/\//i.test(t)) return t;
+    return 'https://' + t.replace(/^\/+/, '');
+}
+
 function parseServicesInput(servicesInput, currentServices) {
     if (!servicesInput) return currentServices || defaultSettings().services;
     const lines = servicesInput.split(/\r?\n/).map(l => l.trim()).filter(Boolean);
@@ -140,7 +148,9 @@ app.post('/admin/settings', requireAuth, upload.single('heroImageFile'), (req, r
         const absolute = `${req.protocol}://${req.get('host')}${relative}`;
         finalHeroUrl = absolute;
     }
-    writeSettings({ heroBackgroundUrl: finalHeroUrl, heroTitle, heroSubtitle, aboutTitle, aboutText, contactAddress, phonePrimary, phoneSecondary, email, instagramUrl, linkedinUrl, mapEmbedUrl, services });
+    const instagramUrlNorm = normalizeWebUrl(instagramUrl);
+    const linkedinUrlNorm = normalizeWebUrl(linkedinUrl);
+    writeSettings({ heroBackgroundUrl: finalHeroUrl, heroTitle, heroSubtitle, aboutTitle, aboutText, contactAddress, phonePrimary, phoneSecondary, email, instagramUrl: instagramUrlNorm, linkedinUrl: linkedinUrlNorm, mapEmbedUrl, services });
     res.redirect('/admin/panel');
 });
 

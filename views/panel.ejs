@@ -58,8 +58,19 @@
                 <input type="text" name="linkedinUrl" value="<%= (settings && settings.linkedinUrl) || '' %>">
                 <label>Google Maps Embed URL</label>
                 <input type="text" name="mapEmbedUrl" value="<%= (settings && settings.mapEmbedUrl) || '' %>">
-                <label>Hizmetler (her satır: ikon|başlık|açıklama)</label>
-                <textarea name="servicesInput" rows="6" placeholder="🏗️|Mimari Tasarım|Özgün ve işlevsel mimari çözümler sunuyoruz."><%= (settings && settings.services ? settings.services.map(s=>`${s.icon}|${s.title}|${s.desc}`).join('\n') : '') %></textarea>
+                <h3>Hizmetler</h3>
+                <div id="servicesEditor">
+                    <% const _services = (settings && settings.services) || []; _services.forEach(function(s){ %>
+                    <div class="service-row" style="display:grid;grid-template-columns:80px 1fr 2fr auto;gap:8px;margin-bottom:8px;align-items:center;">
+                        <input type="text" class="svc-icon" placeholder="İkon" value="<%= s.icon %>">
+                        <input type="text" class="svc-title" placeholder="Başlık" value="<%= s.title %>">
+                        <input type="text" class="svc-desc" placeholder="Açıklama" value="<%= s.desc %>">
+                        <button type="button" class="svc-remove">Sil</button>
+                    </div>
+                    <% }) %>
+                </div>
+                <button type="button" id="addServiceBtn" style="margin:6px 0;">Hizmet Ekle</button>
+                <textarea name="servicesInput" id="servicesInput" style="display:none"></textarea>
                 <button type="submit">Ayarları Kaydet</button>
             </div>
         </div>
@@ -113,5 +124,44 @@
         </tr>
         <% }) %>
     </table>
+    <script>
+    (function(){
+        const editor = document.getElementById('servicesEditor');
+        const addBtn = document.getElementById('addServiceBtn');
+        const hidden = document.getElementById('servicesInput');
+        function serialize(){
+            const rows = editor.querySelectorAll('.service-row');
+            const lines = [];
+            rows.forEach(r => {
+                const icon = r.querySelector('.svc-icon').value.trim();
+                const title = r.querySelector('.svc-title').value.trim();
+                const desc = r.querySelector('.svc-desc').value.trim();
+                if (title) lines.push(`${icon}|${title}|${desc}`);
+            });
+            hidden.value = lines.join('\n');
+        }
+        editor.addEventListener('input', serialize);
+        editor.addEventListener('click', (e)=>{
+            if (e.target.classList.contains('svc-remove')){
+                e.target.closest('.service-row').remove();
+                serialize();
+            }
+        });
+        if (addBtn){
+            addBtn.addEventListener('click', ()=>{
+                const div = document.createElement('div');
+                div.className='service-row';
+                div.style.cssText='display:grid;grid-template-columns:80px 1fr 2fr auto;gap:8px;margin-bottom:8px;align-items:center;';
+                div.innerHTML = '<input type="text" class="svc-icon" placeholder="İkon" value="">\
+                                 <input type="text" class="svc-title" placeholder="Başlık" value="">\
+                                 <input type="text" class="svc-desc" placeholder="Açıklama" value="">\
+                                 <button type="button" class="svc-remove">Sil</button>';
+                editor.appendChild(div);
+                serialize();
+            });
+        }
+        serialize();
+    })();
+    </script>
 </body>
 </html> 
