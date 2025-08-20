@@ -29,8 +29,10 @@
     <form method="post" action="/admin/settings" class="panel-form">
         <div class="panel-flex">
             <div class="panel-col">
-                <label>Hero Arkaplan Görseli URL</label>
-                <input type="text" name="heroBackgroundUrl" value="<%= (settings && settings.heroBackgroundUrl) || '' %>" placeholder="https://...">
+                <label>Hero Arkaplan Görseli</label>
+                <input type="file" name="heroImageFile" accept="image/*">
+                <small>Mevcut: <%= (settings && settings.heroBackgroundUrl) ? settings.heroBackgroundUrl : '—' %></small>
+                <input type="text" name="heroBackgroundUrl" value="<%= (settings && settings.heroBackgroundUrl) || '' %>" placeholder="(İsterseniz URL de girebilirsiniz)">
                 <label>Hero Başlık</label>
                 <input type="text" name="heroTitle" value="<%= (settings && settings.heroTitle) || '' %>" placeholder="MİMARİ MÜKEMMELLİK">
                 <label>Hero Alt Başlık</label>

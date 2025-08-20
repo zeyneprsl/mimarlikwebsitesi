@@ -115,11 +115,18 @@ app.get('/admin/panel', requireAuth, (req, res) => {
 });
 
 // Site Ayarları Kaydet
-app.post('/admin/settings', requireAuth, (req, res) => {
+app.post('/admin/settings', requireAuth, upload.single('heroImageFile'), (req, res) => {
     const current = readSettings();
     const { heroBackgroundUrl, heroTitle, heroSubtitle, aboutTitle, aboutText, contactAddress, phonePrimary, phoneSecondary, email, instagramUrl, linkedinUrl, mapEmbedUrl, servicesInput } = req.body;
     const services = parseServicesInput(servicesInput, current.services);
-    writeSettings({ heroBackgroundUrl, heroTitle, heroSubtitle, aboutTitle, aboutText, contactAddress, phonePrimary, phoneSecondary, email, instagramUrl, linkedinUrl, mapEmbedUrl, services });
+    // Hero arka plan: dosya yüklendiyse tam URL üret
+    let finalHeroUrl = heroBackgroundUrl || current.heroBackgroundUrl;
+    if (req.file) {
+        const relative = '/uploads/' + req.file.filename;
+        const absolute = `${req.protocol}://${req.get('host')}${relative}`;
+        finalHeroUrl = absolute;
+    }
+    writeSettings({ heroBackgroundUrl: finalHeroUrl, heroTitle, heroSubtitle, aboutTitle, aboutText, contactAddress, phonePrimary, phoneSecondary, email, instagramUrl, linkedinUrl, mapEmbedUrl, services });
     res.redirect('/admin/panel');
 });
 
