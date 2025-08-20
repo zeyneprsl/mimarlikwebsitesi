@@ -4,13 +4,22 @@ const multer = require('multer');
 const cors = require('cors');
 const fs = require('fs');
 const path = require('path');
+const cookieParser = require('cookie-parser');
+const session = require('express-session');
 
 const app = express();
-const PORT = 3001;
+const PORT = process.env.PORT || 3001;
 
 app.use(cors());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+app.use(cookieParser());
+app.use(session({
+    secret: process.env.SESSION_SECRET || 'berramimarlik_session_secret',
+    resave: false,
+    saveUninitialized: false,
+    cookie: { maxAge: 1000 * 60 * 60 * 8 }
+}));
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 app.use('/icons', express.static(path.join(__dirname, 'icons')));
 app.set('view engine', 'ejs');
@@ -50,35 +59,45 @@ function writeSettings(settings) {
     fs.writeFileSync(SETTINGS_FILE, JSON.stringify(merged, null, 2));
 }
 
-// Admin Panel Giriş (dummy şifre: admin123)
+// Basit oturum kontrolü
+function requireAuth(req, res, next) {
+    if (req.session && req.session.authed) return next();
+    return res.redirect('/admin');
+}
+
+// Admin Panel Giriş (şifre env'den okunur, yoksa admin123)
 app.get('/admin', (req, res) => {
     res.render('login');
 });
 app.post('/admin', (req, res) => {
     const { password } = req.body;
-    if (password === 'admin123') {
-        res.redirect('/admin/panel');
-    } else {
-        res.render('login', { error: 'Hatalı şifre!' });
+    const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'admin123';
+    if (password === ADMIN_PASSWORD) {
+        req.session.authed = true;
+        return res.redirect('/admin/panel');
     }
+    res.render('login', { error: 'Hatalı şifre!' });
+});
+app.get('/admin/logout', (req, res) => {
+    req.session.destroy(() => res.redirect('/admin'));
 });
 
 // Admin Paneli
-app.get('/admin/panel', (req, res) => {
+app.get('/admin/panel', requireAuth, (req, res) => {
     const projects = readProjects();
     const settings = readSettings();
     res.render('panel', { projects, settings });
 });
 
 // Site Ayarları Kaydet
-app.post('/admin/settings', (req, res) => {
+app.post('/admin/settings', requireAuth, (req, res) => {
     const { heroBackgroundUrl, heroTitle, heroSubtitle } = req.body;
     writeSettings({ heroBackgroundUrl, heroTitle, heroSubtitle });
     res.redirect('/admin/panel');
 });
 
 // Proje Ekleme
-app.post('/admin/add', upload.single('imageFile'), (req, res) => {
+app.post('/admin/add', requireAuth, upload.single('imageFile'), (req, res) => {
     const { name, desc, imageUrl, tags } = req.body;
     let image = imageUrl;
     if (req.file) {
@@ -99,7 +118,7 @@ app.post('/admin/add', upload.single('imageFile'), (req, res) => {
 });
 
 // Proje Silme
-app.post('/admin/delete/:id', (req, res) => {
+app.post('/admin/delete/:id', requireAuth, (req, res) => {
     let projects = readProjects();
     projects = projects.filter(p => p.id != req.params.id);
     writeProjects(projects);
@@ -107,12 +126,12 @@ app.post('/admin/delete/:id', (req, res) => {
 });
 
 // Proje Düzenleme (GET ve POST)
-app.get('/admin/edit/:id', (req, res) => {
+app.get('/admin/edit/:id', requireAuth, (req, res) => {
     const projects = readProjects();
     const project = projects.find(p => p.id == req.params.id);
     res.render('edit', { project });
 });
-app.post('/admin/edit/:id', upload.single('imageFile'), (req, res) => {
+app.post('/admin/edit/:id', requireAuth, upload.single('imageFile'), (req, res) => {
     let projects = readProjects();
     const idx = projects.findIndex(p => p.id == req.params.id);
     if (idx === -1) return res.redirect('/admin/panel');

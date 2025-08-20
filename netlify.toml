@@ -9,3 +9,15 @@
   from = "/api/*"
   to = "/.netlify/functions/:splat"
   status = 200
+
+[[redirects]]
+  from = "/admin/*"
+  to = "https://berra-admin.onrender.com/admin/:splat"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/admin"
+  to = "https://berra-admin.onrender.com/admin"
+  status = 200
+  force = true
