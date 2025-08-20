@@ -48,6 +48,7 @@ function writeProjects(projects) {
 
 function defaultSettings() {
     return {
+        brandTitle: 'BERRA',
         heroBackgroundUrl: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1200&q=80',
         heroTitle: 'MİMARİ MÜKEMMELLİK',
         heroSubtitle: 'Geleceğin yapılarını bugün tasarlıyoruz',
@@ -139,7 +140,7 @@ app.get('/admin/panel', requireAuth, (req, res) => {
 // Site Ayarları Kaydet
 app.post('/admin/settings', requireAuth, upload.single('heroImageFile'), (req, res) => {
     const current = readSettings();
-    const { heroBackgroundUrl, heroTitle, heroSubtitle, aboutTitle, aboutText, contactAddress, phonePrimary, phoneSecondary, email, instagramUrl, linkedinUrl, mapEmbedUrl, servicesInput } = req.body;
+    const { brandTitle, heroBackgroundUrl, heroTitle, heroSubtitle, aboutTitle, aboutText, contactAddress, phonePrimary, phoneSecondary, email, instagramUrl, linkedinUrl, mapEmbedUrl, servicesInput } = req.body;
     const services = parseServicesInput(servicesInput, current.services);
     // Hero arka plan: dosya yüklendiyse tam URL üret
     let finalHeroUrl = heroBackgroundUrl || current.heroBackgroundUrl;
@@ -150,7 +151,7 @@ app.post('/admin/settings', requireAuth, upload.single('heroImageFile'), (req, r
     }
     const instagramUrlNorm = normalizeWebUrl(instagramUrl);
     const linkedinUrlNorm = normalizeWebUrl(linkedinUrl);
-    writeSettings({ heroBackgroundUrl: finalHeroUrl, heroTitle, heroSubtitle, aboutTitle, aboutText, contactAddress, phonePrimary, phoneSecondary, email, instagramUrl: instagramUrlNorm, linkedinUrl: linkedinUrlNorm, mapEmbedUrl, services });
+    writeSettings({ brandTitle, heroBackgroundUrl: finalHeroUrl, heroTitle, heroSubtitle, aboutTitle, aboutText, contactAddress, phonePrimary, phoneSecondary, email, instagramUrl: instagramUrlNorm, linkedinUrl: linkedinUrlNorm, mapEmbedUrl, services });
     res.redirect('/admin/panel');
 });
 

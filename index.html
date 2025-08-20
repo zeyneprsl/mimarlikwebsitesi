@@ -9,7 +9,7 @@
 <body>
     <nav id="navbar">
         <div class="nav-container">
-            <div class="logo">BERRA</div>
+            <div class="logo" id="brandTitle">BERRA</div>
             <ul class="nav-links">
                 <li><a href="#home">Ana Sayfa</a></li>
                 <li><a href="#about">Hakkımızda</a></li>
@@ -125,6 +125,7 @@
           const r = await fetch('/.netlify/functions/settings');
           if (r.ok) {
             const s = await r.json();
+            if (s.brandTitle) document.getElementById('brandTitle').textContent = s.brandTitle;
             if (s.heroBackgroundUrl) document.querySelector('.hero').style.backgroundImage = `url('${s.heroBackgroundUrl}')`;
             if (s.heroTitle) document.querySelector('.hero h1').textContent = s.heroTitle;
             if (s.heroSubtitle) document.querySelector('.hero p').textContent = s.heroSubtitle;

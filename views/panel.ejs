@@ -29,6 +29,8 @@
     <form method="post" action="/admin/settings" enctype="multipart/form-data" class="panel-form">
         <div class="panel-flex">
             <div class="panel-col">
+                <label>Marka Başlığı (sol üst logo yazısı)</label>
+                <input type="text" name="brandTitle" value="<%= (settings && settings.brandTitle) || 'BERRA' %>">
                 <label>Hero Arkaplan Görseli</label>
                 <input type="file" name="heroImageFile" accept="image/*">
                 <small>Mevcut: <%= (settings && settings.heroBackgroundUrl) ? settings.heroBackgroundUrl : '—' %></small>
