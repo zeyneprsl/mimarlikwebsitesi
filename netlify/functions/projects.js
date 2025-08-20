@@ -10,14 +10,26 @@ exports.handler = async function(event, context) {
     }
 
     try {
-        // Prefer ephemeral writeable storage on Netlify
-        const isNetlify = !!process.env.NETLIFY;
+        // If ADMIN_API_URL is set, proxy live data from admin service
+        const adminApi = process.env.ADMIN_API_URL || 'https://berra-admin.onrender.com';
+        try {
+            const resp = await fetch(adminApi + '/api/projects');
+            if (resp.ok) {
+                const data = await resp.json();
+                return {
+                    statusCode: 200,
+                    headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' },
+                    body: JSON.stringify(data)
+                };
+            }
+        } catch (e) {
+            // fall back to file
+        }
+
+        // Fallback to repo files (local dev)
         const repoProjectsFile = path.join(__dirname, '../../data/projects.json');
-        const tmpDir = '/tmp';
-        const tmpProjectsFile = path.join(tmpDir, 'projects.json');
-        const projectsFile = isNetlify ? (fs.existsSync(tmpProjectsFile) ? tmpProjectsFile : repoProjectsFile) : repoProjectsFile;
         
-        if (!fs.existsSync(projectsFile)) {
+        if (!fs.existsSync(repoProjectsFile)) {
             // Varsayılan projeleri döndür
             const defaultProjects = [
                 {id:1, name:'Teona Bungalov Otel', desc:'Doğanın kalbinde, rahatlık ve estetiği bir araya getirdik.', image:'/uploads/sample1.jpg', tags:['Bungalov','Otel'], likes: 0},
@@ -40,7 +52,7 @@ exports.handler = async function(event, context) {
             };
         }
 
-        const projectsData = fs.readFileSync(projectsFile, 'utf-8');
+        const projectsData = fs.readFileSync(repoProjectsFile, 'utf-8');
         const projects = JSON.parse(projectsData);
 
         return {

@@ -29,12 +29,10 @@
     </section>
     
     <section id="about" class="section fade-in">
-        <h2>Hakkımızda</h2>
+        <h2 id="aboutTitle">Hakkımızda</h2>
         <div class="about-content">
             <div class="about-text">
-                <p>Berra Mimarlık olarak, 15 yıllık deneyimimizle modern mimarinin sınırlarını zorlayan, sürdürülebilir ve işlevsel tasarımlar oluşturuyoruz. Her proje için özgün çözümler geliştirerek, müşterilerimizin hayallerini gerçeğe dönüştürüyoruz.</p>
-                <br>
-                <p>Uzman ekibimizle konut, ticari ve endüstriyel projelerde yenilikçi yaklaşımlar benimsiyor, çevreye saygılı ve enerji verimli yapılar tasarlıyoruz.</p>
+                <p id="aboutText">Berra Mimarlık olarak, 15 yıllık deneyimimizle modern mimarinin sınırlarını zorlayan, sürdürülebilir ve işlevsel tasarımlar oluşturuyoruz. Uzman ekibimizle konut, ticari ve endüstriyel projelerde yenilikçi yaklaşımlar benimsiyor, çevreye saygılı ve enerji verimli yapılar tasarlıyoruz.</p>
             </div>
             <div class="about-image"></div>
         </div>
@@ -121,5 +119,20 @@
     </div>
     
     <script src="script.js"></script>
+    <script>
+      (async function(){
+        try {
+          const r = await fetch('/.netlify/functions/settings');
+          if (r.ok) {
+            const s = await r.json();
+            if (s.heroBackgroundUrl) document.querySelector('.hero').style.backgroundImage = `url('${s.heroBackgroundUrl}')`;
+            if (s.heroTitle) document.querySelector('.hero h1').textContent = s.heroTitle;
+            if (s.heroSubtitle) document.querySelector('.hero p').textContent = s.heroSubtitle;
+            if (s.aboutTitle) document.getElementById('aboutTitle').textContent = s.aboutTitle;
+            if (s.aboutText) document.getElementById('aboutText').textContent = s.aboutText;
+          }
+        } catch (e) {}
+      })();
+    </script>
 </body>
 </html> 
