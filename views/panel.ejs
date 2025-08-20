@@ -25,6 +25,21 @@
     </style>
 </head>
 <body>
+    <h2>Site Ayarları</h2>
+    <form method="post" action="/admin/settings" class="panel-form">
+        <div class="panel-flex">
+            <div class="panel-col">
+                <label>Hero Arkaplan Görseli URL</label>
+                <input type="text" name="heroBackgroundUrl" value="<%= (settings && settings.heroBackgroundUrl) || '' %>" placeholder="https://...">
+                <label>Hero Başlık</label>
+                <input type="text" name="heroTitle" value="<%= (settings && settings.heroTitle) || '' %>" placeholder="MİMARİ MÜKEMMELLİK">
+                <label>Hero Alt Başlık</label>
+                <input type="text" name="heroSubtitle" value="<%= (settings && settings.heroSubtitle) || '' %>" placeholder="Geleceğin yapılarını bugün tasarlıyoruz">
+                <button type="submit">Ayarları Kaydet</button>
+            </div>
+        </div>
+    </form>
+
     <h2>Yeni Proje Ekle</h2>
     <form method="post" action="/admin/add" enctype="multipart/form-data" class="panel-form">
         <div class="panel-flex">

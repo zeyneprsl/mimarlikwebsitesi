@@ -10,7 +10,12 @@ exports.handler = async function(event, context) {
     }
 
     try {
-        const projectsFile = path.join(__dirname, '../../data/projects.json');
+        // Prefer ephemeral writeable storage on Netlify
+        const isNetlify = !!process.env.NETLIFY;
+        const repoProjectsFile = path.join(__dirname, '../../data/projects.json');
+        const tmpDir = '/tmp';
+        const tmpProjectsFile = path.join(tmpDir, 'projects.json');
+        const projectsFile = isNetlify ? (fs.existsSync(tmpProjectsFile) ? tmpProjectsFile : repoProjectsFile) : repoProjectsFile;
         
         if (!fs.existsSync(projectsFile)) {
             // Varsayılan projeleri döndür

@@ -11,7 +11,11 @@ exports.handler = async function(event, context) {
 
     try {
         const { projectId } = JSON.parse(event.body);
-        const projectsFile = path.join(__dirname, '../../data/projects.json');
+        const isNetlify = !!process.env.NETLIFY;
+        const repoProjectsFile = path.join(__dirname, '../../data/projects.json');
+        const tmpDir = '/tmp';
+        const tmpProjectsFile = path.join(tmpDir, 'projects.json');
+        const projectsFile = isNetlify ? tmpProjectsFile : repoProjectsFile;
         
         let projects = [];
         
@@ -64,9 +68,14 @@ exports.handler = async function(event, context) {
 
         project.likes = Math.max(0, project.likes - 1);
         project.likedIps.splice(ipIndex, 1);
-        
-        // Projeleri kaydet
-        fs.writeFileSync(projectsFile, JSON.stringify(projects, null, 2));
+
+        // Projeleri kaydet (Netlify'da /tmp dizinine)
+        if (isNetlify) {
+            try { if (!fs.existsSync(tmpDir)) fs.mkdirSync(tmpDir, { recursive: true }); } catch (e) {}
+            fs.writeFileSync(tmpProjectsFile, JSON.stringify(projects, null, 2));
+        } else {
+            fs.writeFileSync(repoProjectsFile, JSON.stringify(projects, null, 2));
+        }
 
         return {
             statusCode: 200,

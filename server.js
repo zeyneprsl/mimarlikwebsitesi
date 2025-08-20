@@ -6,7 +6,7 @@ const fs = require('fs');
 const path = require('path');
 
 const app = express();
-const PORT = 3000;
+const PORT = 3001;
 
 app.use(cors());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -18,6 +18,7 @@ app.set('views', path.join(__dirname, 'views'));
 
 const upload = multer({ dest: 'uploads/' });
 const PROJECTS_FILE = path.join(__dirname, 'data', 'projects.json');
+const SETTINGS_FILE = path.join(__dirname, 'data', 'settings.json');
 
 function readProjects() {
     if (!fs.existsSync(PROJECTS_FILE)) return [];
@@ -25,6 +26,28 @@ function readProjects() {
 }
 function writeProjects(projects) {
     fs.writeFileSync(PROJECTS_FILE, JSON.stringify(projects, null, 2));
+}
+
+function defaultSettings() {
+    return {
+        heroBackgroundUrl: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1200&q=80',
+        heroTitle: 'MİMARİ MÜKEMMELLİK',
+        heroSubtitle: 'Geleceğin yapılarını bugün tasarlıyoruz'
+    };
+}
+function readSettings() {
+    if (!fs.existsSync(SETTINGS_FILE)) return defaultSettings();
+    try {
+        const raw = fs.readFileSync(SETTINGS_FILE, 'utf-8');
+        const parsed = JSON.parse(raw);
+        return { ...defaultSettings(), ...parsed };
+    } catch (e) {
+        return defaultSettings();
+    }
+}
+function writeSettings(settings) {
+    const merged = { ...defaultSettings(), ...settings };
+    fs.writeFileSync(SETTINGS_FILE, JSON.stringify(merged, null, 2));
 }
 
 // Admin Panel Giriş (dummy şifre: admin123)
@@ -43,7 +66,15 @@ app.post('/admin', (req, res) => {
 // Admin Paneli
 app.get('/admin/panel', (req, res) => {
     const projects = readProjects();
-    res.render('panel', { projects });
+    const settings = readSettings();
+    res.render('panel', { projects, settings });
+});
+
+// Site Ayarları Kaydet
+app.post('/admin/settings', (req, res) => {
+    const { heroBackgroundUrl, heroTitle, heroSubtitle } = req.body;
+    writeSettings({ heroBackgroundUrl, heroTitle, heroSubtitle });
+    res.redirect('/admin/panel');
 });
 
 // Proje Ekleme
@@ -150,7 +181,8 @@ app.get('/api/projects', (req, res) => {
 // Ana sayfa: Projeleri dinamik olarak göster
 app.get('/', (req, res) => {
     const projects = readProjects();
-    res.render('index', { projects });
+    const settings = readSettings();
+    res.render('index', { projects, settings });
 });
 
 // Proje Detay Ekranı
