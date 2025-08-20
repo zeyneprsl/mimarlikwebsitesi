@@ -33,7 +33,10 @@ if (!fs.existsSync(UPLOADS_DIR)) {
 }
 const upload = multer({ dest: UPLOADS_DIR, limits: { fileSize: 8 * 1024 * 1024 } });
 const PROJECTS_FILE = path.join(__dirname, 'data', 'projects.json');
-const SETTINGS_FILE = path.join(__dirname, 'data', 'settings.json');
+const SETTINGS_FILE_REPO = path.join(__dirname, 'data', 'settings.json');
+const RUNTIME_DIR = path.join('/tmp', 'berra_data');
+try { if (!fs.existsSync(RUNTIME_DIR)) fs.mkdirSync(RUNTIME_DIR, { recursive: true }); } catch (e) {}
+const SETTINGS_FILE_RUNTIME = path.join(RUNTIME_DIR, 'settings.json');
 
 function readProjects() {
     if (!fs.existsSync(PROJECTS_FILE)) return [];
@@ -66,18 +69,23 @@ function defaultSettings() {
     };
 }
 function readSettings() {
-    if (!fs.existsSync(SETTINGS_FILE)) return defaultSettings();
-    try {
-        const raw = fs.readFileSync(SETTINGS_FILE, 'utf-8');
-        const parsed = JSON.parse(raw);
-        return { ...defaultSettings(), ...parsed };
-    } catch (e) {
-        return defaultSettings();
+    // Önce runtime (yazılabilir) dosyayı dene, yoksa repo'daki dosyayı oku
+    const candidates = [SETTINGS_FILE_RUNTIME, SETTINGS_FILE_REPO];
+    for (const file of candidates) {
+        if (fs.existsSync(file)) {
+            try {
+                const raw = fs.readFileSync(file, 'utf-8');
+                const parsed = JSON.parse(raw);
+                return { ...defaultSettings(), ...parsed };
+            } catch (e) { /* next */ }
+        }
     }
+    return defaultSettings();
 }
 function writeSettings(settings) {
     const merged = { ...defaultSettings(), ...settings };
-    fs.writeFileSync(SETTINGS_FILE, JSON.stringify(merged, null, 2));
+    // Her zaman yazılabilir runtime dosyasına kaydet
+    fs.writeFileSync(SETTINGS_FILE_RUNTIME, JSON.stringify(merged, null, 2));
 }
 
 function parseServicesInput(servicesInput, currentServices) {
