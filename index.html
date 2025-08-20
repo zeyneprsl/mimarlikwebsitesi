@@ -17,7 +17,7 @@
                 <li><a href="#services">Hizmetler</a></li>
                 <li><a href="#contact">İletişim</a></li>
                 <li id="adminNav" style="display:none">
-                    <a id="adminNavLink" href="#" target="_blank" rel="noopener">Admin</a>
+                    <a id="adminNavLink" href="/admin" rel="noopener">Admin</a>
                 </li>
             </ul>
         </div>
@@ -132,7 +132,7 @@
                 const li = document.getElementById('adminNav');
                 if (li) li.style.display = 'list-item';
                 const link = document.getElementById('adminNavLink');
-                if (link) link.href = 'https://github.com/zeyneprsl/mimarlikwebsitesi/tree/main/data';
+                if (link && !link.href.includes('/admin')) link.href = '/admin';
             }
             // Kısayol: Alt+Shift+A ile admin linkini kalıcı göster
             window.addEventListener('keydown', (e) => {
